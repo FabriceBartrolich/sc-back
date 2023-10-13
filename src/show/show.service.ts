@@ -1,26 +1,40 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateShowDto } from './dto/create-show.dto';
 import { UpdateShowDto } from './dto/update-show.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Show } from './entities/show.entity';
 
 @Injectable()
 export class ShowService {
-  create(createShowDto: CreateShowDto) {
-    return 'This action adds a new show';
+    constructor(
+    @InjectRepository(Show) private readonly showRepository: Repository<Show>,
+  ) {}
+    async create(createShowDto: CreateShowDto) {
+        const show = this.showRepository.create(createShowDto);
+        return this.showRepository.save(show);
+    }
+
+  async findAll() {
+    return this.showRepository.find();
   }
 
-  findAll() {
-    return `This action returns all show`;
+async findOne(id: number) {
+    const found = await this.showRepository.findOne({ where: { id: id } });
+    if (!found) {
+        throw new NotFoundException(`Série #${id} non trouvée`);
+    }
+    return found;
+}
+
+  async update(id: number, updateShowDto: UpdateShowDto) {
+    const showToUpdate = await this.findOne(id);
+    Object.assign(showToUpdate, updateShowDto);
+    return this.showRepository.save(showToUpdate);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} show`;
-  }
-
-  update(id: number, updateShowDto: UpdateShowDto) {
-    return `This action updates a #${id} show`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} show`;
-  }
+    async remove(id: number) {
+        const showToRemove = await this.findOne(id);
+        return this.showRepository.remove(showToRemove);
+    }
 }

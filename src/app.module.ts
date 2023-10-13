@@ -22,6 +22,7 @@ import { Show } from './show/entities/show.entity';
       database: process.env.POSTGRES_DATABASE,
       entities: [User, Show, Genre],
       synchronize: false,
+      logging: true
     }),
     UserModule,
     ShowModule,
