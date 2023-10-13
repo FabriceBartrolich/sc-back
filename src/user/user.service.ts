@@ -29,11 +29,14 @@ export class UserService {
     return found;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
-    const userToUpdate = await this.userRepository.findOne({ where: { id: id} });
+async update(id: number, updateUserDto: UpdateUserDto) {
+    const userToUpdate = await this.userRepository.findOne({ where: { id: id } });
+        if (!userToUpdate) {
+      throw new NotFoundException(`L'utilisateur d'id ${id} n'existe pas`);
+    }
     Object.assign(userToUpdate, updateUserDto);
     return this.userRepository.save(userToUpdate);
-  }
+}
 
   async remove(id: number) {
     const userToRemove = await this.userRepository.findOne({ where: { id: id} });

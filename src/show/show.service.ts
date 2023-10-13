@@ -27,14 +27,17 @@ async findOne(id: number) {
     return found;
 }
 
-  async update(id: number, updateShowDto: UpdateShowDto) {
-    const showToUpdate = await this.findOne(id);
+async update(id: number, updateShowDto: UpdateShowDto) {
+    const showToUpdate = await this.showRepository.findOne({ where: { id: id } });
+    if (!showToUpdate) {
+      throw new NotFoundException(`Série #${id} non trouvée`);
+    }
     Object.assign(showToUpdate, updateShowDto);
     return this.showRepository.save(showToUpdate);
-  }
+}
 
     async remove(id: number) {
-        const showToRemove = await this.findOne(id);
+        const showToRemove = await this.showRepository.findOne({ where: { id: id } });
         return this.showRepository.remove(showToRemove);
     }
 }

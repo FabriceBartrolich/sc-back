@@ -29,11 +29,14 @@ async findOne(id: number) {
     return found;
 }
 
-  async update(id: number, updateGenreDto: UpdateGenreDto) {
-    const genre = await this.findOne(id);
-    this.genreRepository.merge(genre, updateGenreDto);
-    return await this.genreRepository.save(genre);
-  }
+async update(id: number, updateGenreDto: UpdateGenreDto) {
+    const genreToUpdate = await this.genreRepository.findOne({ where: { id: id } });
+    if (!genreToUpdate) {
+        throw new NotFoundException(`La catégorie d'id ${id} n'existe pas.`);
+    }
+    Object.assign(genreToUpdate, updateGenreDto);
+    return await this.genreRepository.save(genreToUpdate);
+}
 
   async remove(id: number) {
     const result = await this.genreRepository.delete(id);
