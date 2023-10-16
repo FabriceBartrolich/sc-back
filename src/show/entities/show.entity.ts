@@ -43,6 +43,6 @@ export class Show {
  
 
   @ManyToOne(() => User, (user) => user.id)
-  @JoinColumn({ name: 'user_id' })
+  @JoinColumn({ name: 'id_user' })
   user: User;
 }

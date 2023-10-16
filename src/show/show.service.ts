@@ -22,7 +22,7 @@ export class ShowService {
 async findOne(id: number) {
     const found = await this.showRepository.findOne({ where: { id: id } });
     if (!found) {
-        throw new NotFoundException(`Série #${id} non trouvée`);
+        throw new NotFoundException(`La série avec l'id n°${id} n'existe pas.`);
     }
     return found;
 }
@@ -30,14 +30,17 @@ async findOne(id: number) {
 async update(id: number, updateShowDto: UpdateShowDto) {
     const showToUpdate = await this.showRepository.findOne({ where: { id: id } });
     if (!showToUpdate) {
-      throw new NotFoundException(`Série #${id} non trouvée`);
+      throw new NotFoundException(`La série avec l'id n°${id} n'existe pas.`);
     }
     Object.assign(showToUpdate, updateShowDto);
     return this.showRepository.save(showToUpdate);
 }
 
-    async remove(id: number) {
-        const showToRemove = await this.showRepository.findOne({ where: { id: id } });
-        return this.showRepository.remove(showToRemove);
+      async remove(id: number) {
+    const result = await this.showRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`La série avec l'id n°${id} n'existe pas.`);
     }
+    return `La série avec l'id n°${id} a été supprimée avec succès.`;
+  }
 }

@@ -9,6 +9,7 @@ import { GenreModule } from './genre/genre.module';
 import { User } from './user/entities/user.entity';
 import { Genre } from './genre/entities/genre.entity';
 import { Show } from './show/entities/show.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { Show } from './show/entities/show.entity';
     UserModule,
     ShowModule,
     GenreModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
