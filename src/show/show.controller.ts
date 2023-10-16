@@ -1,11 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { ShowService } from './show.service';
 import { CreateShowDto } from './dto/create-show.dto';
 import { UpdateShowDto } from './dto/update-show.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('show')
 @Controller('show')
+@UseGuards(AuthGuard('jwt')) 
 export class ShowController {
   constructor(private readonly showService: ShowService) {}
 
