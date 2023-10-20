@@ -10,6 +10,7 @@ import { User } from './user/entities/user.entity';
 import { Genre } from './genre/entities/genre.entity';
 import { Show } from './show/entities/show.entity';
 import { AuthModule } from './auth/auth.module';
+import { TmdbService } from './services/tmdb/tmdb.service';
 
 @Module({
   imports: [
@@ -31,6 +32,6 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, TmdbService],
 })
 export class AppModule {}

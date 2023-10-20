@@ -6,11 +6,11 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
-app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe());
 
   app.enableCors(); // Utilisation de cors
 
-const config = new DocumentBuilder()
+  const config = new DocumentBuilder()
     .setTitle('Series Connect API')
     .setDescription('The Series Connect API description')
     .setVersion('1.0')
