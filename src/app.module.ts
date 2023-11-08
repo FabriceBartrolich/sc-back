@@ -11,6 +11,7 @@ import { Genre } from './genre/entities/genre.entity';
 import { Show } from './show/entities/show.entity';
 import { AuthModule } from './auth/auth.module';
 import { TmdbService } from './services/tmdb/tmdb.service';
+import { Type } from 'class-transformer';
 
 @Module({
   imports: [
@@ -24,12 +25,14 @@ import { TmdbService } from './services/tmdb/tmdb.service';
       database: process.env.POSTGRES_DATABASE,
       entities: [User, Show, Genre],
       synchronize: false,
-      logging: true
+      logging: true,
+    
     }),
     UserModule,
     ShowModule,
     GenreModule,
     AuthModule,
+    TypeOrmModule.forFeature([User])
   ],
   controllers: [AppController],
   providers: [AppService, TmdbService],

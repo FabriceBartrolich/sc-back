@@ -50,8 +50,14 @@ async register(createAuthDto: CreateAuthDto) {
 
   if (user && (await bcrypt.compare(password, user.password))) {
     const payload = { username };
-    const accessToken = this.jwtService.sign(payload);
-    return { accessToken };
+    const token = this.jwtService.sign(payload);
+     return {
+      token,
+      user: {
+        username: user.username,
+        id: user.id
+      }
+    };
   } else {
     throw new UnauthorizedException(
       'Nom d\'utilisateur ou mot de passe incorrects.',

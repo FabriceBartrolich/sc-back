@@ -17,10 +17,13 @@ export class Show {
     description: string | null;
 
     @Column({ type: 'varchar', length: 255 })
-    image: string;
+    poster_path: string;
 
     @Column()
     id_user: number;
+
+      @Column()
+    api_id: number;
    
     // Relations entre l'entité Show et l'entité Genre
 

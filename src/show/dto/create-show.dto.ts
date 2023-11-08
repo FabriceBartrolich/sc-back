@@ -21,10 +21,15 @@ export class CreateShowDto {
   @IsString()
   @MaxLength(255)
   @IsNotEmpty()
-  image: string;
+  poster_path: string;
 
   @ApiProperty()
   @IsInt()
   @IsNotEmpty()
   id_user: number;
+
+   @ApiProperty()
+  @IsInt()
+  @IsNotEmpty()
+  api_id: number;
 }

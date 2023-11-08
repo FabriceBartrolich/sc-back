@@ -20,16 +20,16 @@ export class User {
   @ManyToMany(() => Show, show => show.viewers)
   @JoinTable({ // table de jointure définie du côté de l'entité propriétaire
     name: 'user_views_show', // nom de la table de jointure
-    joinColumn: { name: 'user_id', referencedColumnName: 'id' }, // colonne de cette entité dans la table de jointure
-    inverseJoinColumn: { name: 'show_id', referencedColumnName: 'id' } // colonne de l'entité cible dans la table de jointure
+    joinColumn: { name: 'id_user', referencedColumnName: 'id' }, // colonne de cette entité dans la table de jointure
+    inverseJoinColumn: { name: 'id_show', referencedColumnName: 'id' } // colonne de l'entité cible dans la table de jointure
   })
   viewedShows: Show[];
 
   @ManyToMany(() => Show, show => show.wishers)
   @JoinTable({ // table de jointure définie du côté de l'entité propriétaire
     name: 'user_wishes_show', // nom de la table de jointure
-    joinColumn: { name: 'user_id', referencedColumnName: 'id' }, // colonne de cette entité dans la table de jointure
-    inverseJoinColumn: { name: 'show_id', referencedColumnName: 'id' } // colonne de l'entité cible dans la table de jointure
+    joinColumn: { name: 'id_user', referencedColumnName: 'id' }, // colonne de cette entité dans la table de jointure
+    inverseJoinColumn: { name: 'id_show', referencedColumnName: 'id' } // colonne de l'entité cible dans la table de jointure
   })
   wishedShows: Show[];
   
