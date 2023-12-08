@@ -17,22 +17,18 @@ export class TmdbService {
     ) {}
     
     async searchShow(title: string, userId: number) {
-     
        const url=`${this.base_url}/search/tv?api_key=${this.apiKey}&language=fr-FR&query=${title}`; 
      const me = await this.userRepository.findOne({
       where: { id: userId },
       relations: ['viewedShows', 'wishedShows'],
     });
          try {
-          
         const response = await axios.get(url);
-     
         response.data.results= response.data.results.map(show => {
           const isViewed = me.viewedShows.find(viewedShow => viewedShow.api_id == show.id);
           const isWished = me.wishedShows.find(wishedShow => wishedShow.api_id == show.id);
           return {
             ...show,
-            // condition qui permet de savoir si la série est dans la liste des séries vues de l'utilisateur 
           is_viewed: isViewed ? true : false,
           is_wished: isWished ? true : false,
           }
@@ -60,8 +56,8 @@ async getPopularShows(page: number = 1) {
   const url = `${this.base_url}/tv/popular?api_key=${this.apiKey}&language=fr-FR&page=${page}`;
   try {
     const response = await axios.get(url);
-    const posterPaths = response.data.results.map(show => show.poster_path);
-    return { posterPaths };
+    // const posterPaths = response.data.results.map(show => show.poster_path);
+    return response.data.results;
   } catch (error) {
     throw new Error(`Erreur lors de la récupération des séries populaires: ${error.message}`);
   }

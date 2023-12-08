@@ -8,7 +8,8 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe());
 
-  app.enableCors(); 
+  app.enableCors({origin: 'http://localhost:4200',}); 
+
 
   const config = new DocumentBuilder()
     .setTitle('Series Connect API')

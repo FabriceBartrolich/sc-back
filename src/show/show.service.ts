@@ -22,50 +22,52 @@ export class ShowService {
   }
 
   async addShowViewedList(userId: number, showId: number) {
-    // 1.Récupération de l'utilisateur
     const user = await this.userRepository.findOne({
       where: { id: userId },
       relations: ['viewedShows'],
     });
-    // 2.Récupération de la série qui correspond à l'id
-    
-    let show = await this.showRepository.findOne({ where: { api_id: showId } });
-    console.log(show);
-  
-    if (!show) {
-     //J'ai besoin de récupérer les infos de la série depuis l'API
-const infos = await this.tmdbService.searchShowById(showId);
 
-      show = await this.showRepository.save({ api_id: showId, title: infos.name, poster_path: infos.poster_path, description: infos.overview, is_finished: infos.in_production, id_user: userId   });
-      
+    let show = await this.showRepository.findOne({ where: { api_id: showId } });
+
+    if (!show) {
+      const infos = await this.tmdbService.searchShowById(showId);
+
+      show = await this.showRepository.save({
+        api_id: showId,
+        title: infos.name,
+        poster_path: infos.poster_path,
+        description: infos.overview,
+        is_finished: infos.in_production,
+        id_user: userId,
+      });
     }
-    //  return {show, showId}
-      
-    // 3.Ajout de la série dans la liste des séries vues de l'utilisateur
     user.viewedShows.push(show);
     await this.userRepository.save(user);
     return user;
   }
 
   async addShowWishedList(userId: number, showId: number) {
-    // 1.Récupération de l'utilisateur
     const user = await this.userRepository.findOne({
       where: { id: userId },
       relations: ['wishedShows'],
     });
-    // 2.Récupération de la série qui correspond à l'id
-    let show = await this.showRepository.findOne({ where: { api_id : showId } });
-    console.log(show);
-    
+    let show = await this.showRepository.findOne({ where: { api_id: showId } });
+
     if (!show) {
       const infos = await this.tmdbService.searchShowById(showId);
-      show = await this.showRepository.save({ api_id: showId, title: infos.name, poster_path: infos.poster_path, description: infos.overview, is_finished: infos.in_production, id_user: userId   });
+      show = await this.showRepository.save({
+        api_id: showId,
+        title: infos.name,
+        poster_path: infos.poster_path,
+        description: infos.overview,
+        is_finished: infos.in_production,
+        id_user: userId,
+      });
     }
-   
-    // 3.Ajout de la série dans la liste des séries vues de l'utilisateur
+
     user.wishedShows.push(show);
     await this.userRepository.save(user);
-     return user;
+    return user;
   }
 
   async findAll() {
@@ -125,23 +127,6 @@ const infos = await this.tmdbService.searchShowById(showId);
     return `La série avec l'id n°${id} a été supprimée avec succès.`;
   }
 
-  //   async removeWishedShow(userId: number, showId: number) {
-  //   const user = await this.userRepository.findOne({ where: { id: userId }, relations: ['wishedShows'] });
-  //   if (!user) {
-  //     throw new NotFoundException(`L'utilisateur avec l'id n°${userId} n'existe pas.`);
-  //   }
-
-  //   const showToRemove = user.wishedShows.find(show => show.id === showId);
-  //   if (!showToRemove) {
-  //     throw new NotFoundException(`La série avec l'id n°${showId} n'est pas dans la liste de vos séries à voir.`);
-  //   }
-
-  //   user.wishedShows = user.wishedShows.filter(show => show.id !== showId);
-  //   await this.userRepository.save(user);
-
-  //   return `La série avec l'id n°${showId} a été supprimée de la liste de vos séries à voir.`;
-  // }
-
   async removeWishedShow(userId: number, showId: number) {
     // Récupère l'utilisateur et ses séries souhaitées
     const user = await this.userRepository.findOne({
@@ -154,26 +139,20 @@ const infos = await this.tmdbService.searchShowById(showId);
       );
     }
 
-    // Trouve l'indice de la série à retirer
     const showIndex = user.wishedShows.findIndex((show) => show.id == showId);
-    // return {showIndex}
     if (showIndex === -1) {
       throw new NotFoundException(
         `La série avec l'id n°${showId} n'est pas dans la liste de vos séries à voir.`,
       );
     }
-
-    // Retire la série de la liste
     user.wishedShows.splice(showIndex, 1);
 
-    // Sauvegarde les modifications
     await this.userRepository.save(user);
 
     return `La série avec l'id n°${showId} a été supprimée de la liste de vos séries à voir.`;
   }
 
   async removeViewedShow(userId: number, showId: number) {
-    // Récupère l'utilisateur et ses séries souhaitées
     const user = await this.userRepository.findOne({
       where: { id: userId },
       relations: ['viewedShows'],
@@ -184,19 +163,16 @@ const infos = await this.tmdbService.searchShowById(showId);
       );
     }
 
-    // Trouve l'indice de la série à retirer
     const showIndex = user.viewedShows.findIndex((show) => show.id == showId);
-    // return {showIndex}
+
     if (showIndex === -1) {
       throw new NotFoundException(
         `La série avec l'id n°${showId} n'est pas dans la liste de vos séries vues.`,
       );
     }
 
-    // Retire la série de la liste
     user.viewedShows.splice(showIndex, 1);
 
-    // Sauvegarde les modifications
     await this.userRepository.save(user);
 
     return `La série avec l'id n°${showId} a été supprimée de la liste de vos séries vues.`;
